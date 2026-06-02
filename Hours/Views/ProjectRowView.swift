@@ -58,7 +58,7 @@ struct ProjectRowView: View {
             .buttonStyle(.plain)
             .help("Click to adjust time manually")
             .popover(isPresented: $showingManualEntry, arrowEdge: .trailing) {
-                ManualTimeEntryView(project: project, isPresented: $showingManualEntry)
+                ManualTimeEntryView(isPresented: $showingManualEntry, project: project)
                     .environmentObject(appState)
             }
 

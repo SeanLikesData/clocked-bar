@@ -1,4 +1,4 @@
-name: Hours
+name: Clocked
 options:
   bundleIdPrefix: com.seanlikesdata
   deploymentTarget:
@@ -6,27 +6,26 @@ options:
   xcodeVersion: "15.0"
 
 targets:
-  Hours:
+  Clocked:
     type: application
     platform: macOS
     sources:
-      - path: Hours
+      - path: Clocked
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.seanlikesdata.hours
+        PRODUCT_BUNDLE_IDENTIFIER: com.seanlikesdata.clocked
         SWIFT_VERSION: "5.9"
         MACOSX_DEPLOYMENT_TARGET: "13.0"
         CODE_SIGN_STYLE: Automatic
         DEVELOPMENT_TEAM: ""
-        # No dock icon — menubar-only app
         LSApplicationCategoryType: public.app-category.productivity
     info:
-      path: Hours/Info.plist
+      path: Clocked/Info.plist
       properties:
-        CFBundleName: Hours
-        CFBundleDisplayName: Hours
+        CFBundleName: Clocked
+        CFBundleDisplayName: Clocked
         CFBundleShortVersionString: "1.0"
         CFBundleVersion: "1"
         LSUIElement: true
-        NSHumanReadableDescription: Simple menubar project time tracker
+        NSHumanReadableDescription: Menubar project time tracker
         NSPrincipalClass: NSApplication

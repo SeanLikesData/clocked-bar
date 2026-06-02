@@ -23,7 +23,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private func setupStatusItem() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         guard let button = statusItem.button else { return }
-        button.image = NSImage(systemSymbolName: "clock", accessibilityDescription: "Hours")
+        button.image = NSImage(systemSymbolName: "clock", accessibilityDescription: "Clocked")
         button.imagePosition = .imageLeft
         button.action = #selector(togglePopover)
         button.target = self
@@ -58,7 +58,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private func refreshStatusButton() {
         guard let button = statusItem.button else { return }
         guard let project = appState.activeProject else {
-            button.image = NSImage(systemSymbolName: "clock", accessibilityDescription: "Hours")
+            button.image = NSImage(systemSymbolName: "clock", accessibilityDescription: "Clocked")
             button.title = ""
             return
         }

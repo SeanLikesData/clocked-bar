@@ -1,4 +1,4 @@
-# Hours
+# Clocked
 
 A minimal macOS menubar app for tracking billable time across projects.
 
@@ -23,8 +23,8 @@ A minimal macOS menubar app for tracking billable time across projects.
 ## Build and run
 
 ```sh
-git clone https://github.com/SeanLikesData/hours.git
-cd hours
+git clone https://github.com/SeanLikesData/clocked-bar.git
+cd clocked-bar
 ./run.sh
 ```
 
@@ -36,18 +36,18 @@ To build without launching:
 ./build.sh
 ```
 
-The output is `Hours.app` in the project root.
+The output is `Clocked.app` in the project root.
 
 ## Install to Applications
 
 After building, copy the app bundle to your Applications folder:
 
 ```sh
-cp -R Hours.app /Applications/Hours.app
-open /Applications/Hours.app
+cp -R Clocked.app /Applications/Clocked.app
+open /Applications/Clocked.app
 ```
 
-To add it to Login Items so it starts automatically, open System Settings → General → Login Items and add `/Applications/Hours.app`.
+To add it to Login Items so it starts automatically, open System Settings → General → Login Items and add `/Applications/Clocked.app`.
 
 ## First launch (Gatekeeper)
 
@@ -56,11 +56,11 @@ Because the app is built locally without an Apple Developer certificate, macOS m
 ## Project structure
 
 ```
-Hours/
+Clocked/
 ├── AppDelegate.swift          # NSStatusItem + NSPopover setup
 ├── AppState.swift             # Observable state, timer logic, persistence
+├── ClockedApp.swift           # App entry point
 ├── Formatters.swift           # Duration formatting helpers
-├── HoursApp.swift             # App entry point
 ├── Models/
 │   └── Project.swift          # Project data model
 └── Views/
@@ -74,7 +74,7 @@ Hours/
 
 ## Regenerating the Xcode project
 
-An `Hours.xcodeproj` is included for development in Xcode. If you need to regenerate it after structural changes, install [XcodeGen](https://github.com/yonaskolb/XcodeGen) and run:
+A `Clocked.xcodeproj` is included for development in Xcode. If you need to regenerate it after structural changes, install [XcodeGen](https://github.com/yonaskolb/XcodeGen) and run:
 
 ```sh
 xcodegen generate

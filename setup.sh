@@ -12,5 +12,5 @@ echo "Generating Xcode project..."
 xcodegen generate
 
 echo ""
-echo "Done. Open Hours.xcodeproj to build and run."
-echo "  open Hours.xcodeproj"
+echo "Done. Open Clocked.xcodeproj to build and run."
+echo "  open Clocked.xcodeproj"

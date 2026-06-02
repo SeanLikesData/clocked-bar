@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct HoursApp: App {
+struct ClockedApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
     var body: some Scene {

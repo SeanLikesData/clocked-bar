@@ -1,6 +1,19 @@
 import SwiftUI
 import Combine
 
+enum MenubarDisplay: String, CaseIterable {
+    case iconOnly, time, name, nameAndTime
+
+    var label: String {
+        switch self {
+        case .iconOnly:   return "Icon only"
+        case .time:       return "Elapsed time"
+        case .name:       return "Project name"
+        case .nameAndTime: return "Name + time"
+        }
+    }
+}
+
 @MainActor
 class AppState: ObservableObject {
     @Published var projects: [Project] = []
@@ -8,6 +21,14 @@ class AppState: ObservableObject {
     @Published var timerStartDate: Date? = nil
     // Incremented each second so views that display elapsed time redraw automatically.
     @Published var tick: Date = Date()
+
+    // Settings
+    @Published var menubarDisplay: MenubarDisplay = .time {
+        didSet { saveSettings() }
+    }
+    @Published var menubarShowSeconds: Bool = true {
+        didSet { saveSettings() }
+    }
 
     private var timerCancellable: AnyCancellable?
 
@@ -105,6 +126,11 @@ class AppState: ObservableObject {
 
     // MARK: - Persistence
 
+    private func saveSettings() {
+        UserDefaults.standard.set(menubarDisplay.rawValue, forKey: "hours.menubar.display")
+        UserDefaults.standard.set(menubarShowSeconds, forKey: "hours.menubar.showSeconds")
+    }
+
     private func saveProjects() {
         guard let data = try? JSONEncoder().encode(projects) else { return }
         UserDefaults.standard.set(data, forKey: "hours.projects")
@@ -130,6 +156,13 @@ class AppState: ObservableObject {
            projects.contains(where: { $0.id == id }) {
             activeProjectId = id
             timerStartDate = UserDefaults.standard.object(forKey: "hours.timerStartDate") as? Date ?? Date()
+        }
+        if let raw = UserDefaults.standard.string(forKey: "hours.menubar.display"),
+           let display = MenubarDisplay(rawValue: raw) {
+            menubarDisplay = display
+        }
+        if UserDefaults.standard.object(forKey: "hours.menubar.showSeconds") != nil {
+            menubarShowSeconds = UserDefaults.standard.bool(forKey: "hours.menubar.showSeconds")
         }
     }
 }

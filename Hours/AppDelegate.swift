@@ -42,13 +42,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func observeTimer() {
-        appState.$tick
+        // Observe every published change so settings updates reflect immediately.
+        // objectWillChange fires before the mutation, so we dispatch async to read
+        // the new values after the property has been written.
+        appState.objectWillChange
             .receive(on: RunLoop.main)
-            .sink { [weak self] _ in self?.refreshStatusButton() }
-            .store(in: &cancellables)
-        appState.$activeProjectId
-            .receive(on: RunLoop.main)
-            .sink { [weak self] _ in self?.refreshStatusButton() }
+            .sink { [weak self] _ in
+                DispatchQueue.main.async { self?.refreshStatusButton() }
+            }
             .store(in: &cancellables)
     }
 
@@ -56,13 +57,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func refreshStatusButton() {
         guard let button = statusItem.button else { return }
-        if let project = appState.activeProject {
-            let elapsed = formatDuration(appState.currentSeconds(for: project))
-            button.image = NSImage(systemSymbolName: "clock.fill", accessibilityDescription: nil)
-            button.title = "  \(elapsed)"
-        } else {
+        guard let project = appState.activeProject else {
             button.image = NSImage(systemSymbolName: "clock", accessibilityDescription: "Hours")
             button.title = ""
+            return
+        }
+
+        button.image = NSImage(systemSymbolName: "clock.fill", accessibilityDescription: nil)
+
+        let seconds = appState.currentSeconds(for: project)
+        let timeStr = appState.menubarShowSeconds
+            ? formatDuration(seconds)
+            : formatDurationNoSeconds(seconds)
+
+        switch appState.menubarDisplay {
+        case .iconOnly:
+            button.title = ""
+        case .time:
+            button.title = "  \(timeStr)"
+        case .name:
+            button.title = "  \(project.name)"
+        case .nameAndTime:
+            button.title = "  \(project.name)  \(timeStr)"
         }
     }
 

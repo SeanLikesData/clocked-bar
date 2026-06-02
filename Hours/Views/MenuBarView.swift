@@ -3,6 +3,7 @@ import SwiftUI
 struct MenuBarView: View {
     @EnvironmentObject var appState: AppState
     @State private var showingEditProjects = false
+    @State private var showingSettings = false
     @State private var isAddingProject = false
     @State private var newProjectName = ""
     @FocusState private var addFieldFocused: Bool
@@ -12,6 +13,9 @@ struct MenuBarView: View {
         // Sheets transfer window focus, which makes the NSPopover dismiss itself.
         if showingEditProjects {
             EditProjectsView(onDone: { showingEditProjects = false })
+                .environmentObject(appState)
+        } else if showingSettings {
+            SettingsView(onDone: { showingSettings = false })
                 .environmentObject(appState)
         } else {
             mainView
@@ -25,6 +29,13 @@ struct MenuBarView: View {
                 Text("Hours")
                     .font(.headline)
                 Spacer()
+                Button {
+                    showingSettings = true
+                } label: {
+                    Image(systemName: "gearshape")
+                }
+                .buttonStyle(.plain)
+                .help("Settings")
                 Button {
                     showingEditProjects = true
                 } label: {

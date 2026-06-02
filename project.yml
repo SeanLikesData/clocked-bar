@@ -1,0 +1,32 @@
+name: Hours
+options:
+  bundleIdPrefix: com.seanlikesdata
+  deploymentTarget:
+    macOS: "13.0"
+  xcodeVersion: "15.0"
+
+targets:
+  Hours:
+    type: application
+    platform: macOS
+    sources:
+      - path: Hours
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.seanlikesdata.hours
+        SWIFT_VERSION: "5.9"
+        MACOSX_DEPLOYMENT_TARGET: "13.0"
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: ""
+        # No dock icon — menubar-only app
+        LSApplicationCategoryType: public.app-category.productivity
+    info:
+      path: Hours/Info.plist
+      properties:
+        CFBundleName: Hours
+        CFBundleDisplayName: Hours
+        CFBundleShortVersionString: "1.0"
+        CFBundleVersion: "1"
+        LSUIElement: true
+        NSHumanReadableDescription: Simple menubar project time tracker
+        NSPrincipalClass: NSApplication

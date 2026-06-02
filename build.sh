@@ -18,16 +18,10 @@ sed \
   -e 's/\$(PRODUCT_BUNDLE_IDENTIFIER)/com.seanlikesdata.hours/g' \
   Hours/Info.plist > "$APP/Contents/Info.plist"
 
+SOURCES=$(find Hours -name "*.swift" | sort)
+
 swiftc \
-  Hours/HoursApp.swift \
-  Hours/AppState.swift \
-  Hours/Formatters.swift \
-  Hours/Models/Project.swift \
-  Hours/Views/MenuBarLabel.swift \
-  Hours/Views/MenuBarView.swift \
-  Hours/Views/ProjectRowView.swift \
-  Hours/Views/EditProjectsView.swift \
-  Hours/Views/ManualTimeEntryView.swift \
+  $SOURCES \
   -sdk "$SDK" \
   -target "${ARCH}-apple-macos13.0" \
   -parse-as-library \

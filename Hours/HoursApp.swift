@@ -2,16 +2,11 @@ import SwiftUI
 
 @main
 struct HoursApp: App {
-    @StateObject private var appState = AppState()
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
     var body: some Scene {
-        MenuBarExtra {
-            MenuBarView()
-                .environmentObject(appState)
-        } label: {
-            MenuBarLabel()
-                .environmentObject(appState)
-        }
-        .menuBarExtraStyle(.window)
+        // No windows — the app lives entirely in the menubar.
+        // Settings scene suppresses the "no scenes" warning without creating any UI.
+        Settings { EmptyView() }
     }
 }

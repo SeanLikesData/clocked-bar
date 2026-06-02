@@ -2,16 +2,15 @@ import SwiftUI
 
 struct EditProjectsView: View {
     @EnvironmentObject var appState: AppState
-    @Environment(\.dismiss) var dismiss
+    let onDone: () -> Void
 
     var body: some View {
         VStack(spacing: 0) {
-            // Header
             HStack {
                 Text("Manage Projects")
                     .font(.headline)
                 Spacer()
-                Button("Done") { dismiss() }
+                Button("Done") { onDone() }
                     .keyboardShortcut(.return)
             }
             .padding(.horizontal, 16)
@@ -22,25 +21,23 @@ struct EditProjectsView: View {
             if appState.projects.isEmpty {
                 Text("No projects")
                     .foregroundColor(.secondary)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding(.vertical, 30)
             } else {
+                let rowHeight: CGFloat = 42
+                let listHeight = min(CGFloat(appState.projects.count) * rowHeight, 300)
                 List {
                     ForEach(appState.projects) { project in
                         HStack(spacing: 10) {
                             Image(systemName: "line.3.horizontal")
                                 .foregroundColor(.secondary)
                                 .font(.caption)
-
                             Text(project.name)
                                 .lineLimit(1)
-
                             Spacer()
-
                             Text(formatDurationShort(appState.currentSeconds(for: project)))
                                 .foregroundColor(.secondary)
                                 .font(.caption)
                                 .monospacedDigit()
-
                             Button {
                                 if let idx = appState.projects.firstIndex(where: { $0.id == project.id }) {
                                     appState.deleteProjects(at: IndexSet([idx]))
@@ -58,8 +55,9 @@ struct EditProjectsView: View {
                     .onMove { appState.moveProjects(from: $0, to: $1) }
                 }
                 .listStyle(.inset)
+                .frame(height: listHeight)
             }
         }
-        .frame(width: 320, height: 380)
+        .frame(width: 320)
     }
 }

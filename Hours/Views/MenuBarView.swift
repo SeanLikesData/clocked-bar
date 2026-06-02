@@ -8,6 +8,17 @@ struct MenuBarView: View {
     @FocusState private var addFieldFocused: Bool
 
     var body: some View {
+        // Inline navigation: swap the entire view rather than presenting a sheet.
+        // Sheets transfer window focus, which makes the NSPopover dismiss itself.
+        if showingEditProjects {
+            EditProjectsView(onDone: { showingEditProjects = false })
+                .environmentObject(appState)
+        } else {
+            mainView
+        }
+    }
+
+    private var mainView: some View {
         VStack(spacing: 0) {
             // Header
             HStack {
@@ -18,16 +29,16 @@ struct MenuBarView: View {
                     showingEditProjects = true
                 } label: {
                     Image(systemName: "slider.horizontal.3")
-                        .help("Manage projects")
                 }
                 .buttonStyle(.plain)
+                .help("Manage projects")
             }
             .padding(.horizontal, 14)
             .padding(.vertical, 10)
 
             Divider()
 
-            // Projects
+            // Project list
             if appState.projects.isEmpty {
                 VStack(spacing: 8) {
                     Image(systemName: "clock.badge.plus")
@@ -38,20 +49,24 @@ struct MenuBarView: View {
                         .font(.callout)
                 }
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 32)
+                .padding(.vertical, 30)
             } else {
+                // Use a fixed height derived from project count so the ScrollView
+                // always has a defined frame (unconstrained ScrollViews can collapse
+                // to zero height in NSPopover-hosted SwiftUI views).
+                let rowHeight: CGFloat = 50
+                let listHeight = min(CGFloat(appState.projects.count) * rowHeight, 280)
                 ScrollView {
                     VStack(spacing: 0) {
                         ForEach(appState.projects) { project in
                             ProjectRowView(project: project)
                             if project.id != appState.projects.last?.id {
-                                Divider()
-                                    .padding(.leading, 32)
+                                Divider().padding(.leading, 32)
                             }
                         }
                     }
                 }
-                .frame(maxHeight: 320)
+                .frame(height: listHeight)
             }
 
             Divider()
@@ -97,10 +112,6 @@ struct MenuBarView: View {
             }
         }
         .frame(width: 320)
-        .sheet(isPresented: $showingEditProjects) {
-            EditProjectsView()
-                .environmentObject(appState)
-        }
     }
 
     private func submitNewProject() {

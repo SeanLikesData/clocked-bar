@@ -63,7 +63,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
 
-        button.image = NSImage(systemSymbolName: "clock.fill", accessibilityDescription: nil)
+        // Non-template so the image renders in its actual color rather than
+        // the system menubar foreground color.
+        let greenConfig = NSImage.SymbolConfiguration(paletteColors: [.systemGreen])
+        if let img = NSImage(systemSymbolName: "clock.fill", accessibilityDescription: nil)?
+            .withSymbolConfiguration(greenConfig) {
+            img.isTemplate = false
+            button.image = img
+        }
 
         let seconds = appState.currentSeconds(for: project)
         let timeStr = appState.menubarShowSeconds
